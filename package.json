@@ -1,0 +1,14 @@
+{
+  "name": "rentease",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "backend": "npm --prefix backend run dev",
+    "frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "seed": "npm --prefix backend run seed"
+  },
+  "dependencies": {
+    "mongod": "^2.0.0"
+  }
+}

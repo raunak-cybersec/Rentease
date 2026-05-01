@@ -36,7 +36,7 @@ Add screenshots here after deployment:
 - Browse grid with city, rent, type, gender, amenity, keyword, and sort filters
 - Shareable search URLs powered by query parameters
 - Listing detail page with photo carousel, OpenStreetMap embed, gated contact reveal, and bookmark button
-- Client-side image capture for up to 5 listing photos
+- Cloudinary-backed uploads for up to 5 listing photos
 - Seed data with 12 Indian rental listings across Mumbai, Delhi, Bangalore, Hyderabad, Pune, and Lucknow
 - Dark navy SaaS interface with glass cards, Syne headings, Inter body text, and responsive layouts
 
@@ -48,6 +48,7 @@ Add screenshots here after deployment:
 | Styling | Tailwind CSS, custom global CSS |
 | Backend | Node.js, Express |
 | Database | MongoDB, Mongoose |
+| Image Storage | Cloudinary |
 | Authentication | JWT, bcryptjs |
 | HTTP Client | Axios |
 | Maps | OpenStreetMap embed |
@@ -89,10 +90,14 @@ npm run dev
 Edit `backend/.env` before starting:
 
 ```env
-MONGODB_URI=mongodb://localhost:27017/rentease
+MONGODB_URI=mongodb+srv://user:password@cluster0.example.mongodb.net/rentease?retryWrites=true&w=majority
 JWT_SECRET=replace_this_with_a_long_secret
 PORT=5000
-NODE_ENV=development
+NODE_ENV=production
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+CLOUDINARY_FOLDER=rentease/listings
 ```
 
 ### 2. Seed Data
@@ -176,5 +181,5 @@ Backend API: `http://localhost:5000/api`
 
 ## Notes
 
-- Listing photos are stored as compressed data URLs for a simple local demo. For production, move uploads to object storage such as S3, Cloudinary, or a dedicated media service.
+- Listing photos are uploaded to Cloudinary, and MongoDB stores the returned image URLs.
 - OpenStreetMap is embedded using approximate city coordinates. Production geocoding should store latitude and longitude on each listing.
