@@ -1,8 +1,20 @@
+import mongoose from 'mongoose';
 import User from '../models/User.js';
 import { generateToken } from '../utils/jwt.js';
 
+const ensureDatabaseReady = (res) => {
+  if (mongoose.connection.readyState === 1) {
+    return true;
+  }
+
+  res.status(503).json({ message: 'Database is not connected. Please try again shortly.' });
+  return false;
+};
+
 export const signup = async (req, res, next) => {
   try {
+    if (!ensureDatabaseReady(res)) return;
+
     const { name, email, password, role, phone } = req.body;
 
     if (!name || !email || !password || !role) {
@@ -30,7 +42,7 @@ export const signup = async (req, res, next) => {
       email: normalizedEmail,
       passwordHash: password,
       role,
-      phone,
+      phone: phone?.trim(),
     });
 
     await user.save();
@@ -55,6 +67,8 @@ export const signup = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   try {
+    if (!ensureDatabaseReady(res)) return;
+
     const { email, password } = req.body;
 
     if (!email || !password) {

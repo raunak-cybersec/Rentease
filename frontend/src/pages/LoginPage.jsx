@@ -18,7 +18,7 @@ export default function LoginPage() {
       if (user.role === 'admin') navigate('/admin');
       else navigate(user.role === 'landlord' ? '/dashboard' : '/browse');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.userMessage || err.response?.data?.message || 'Login failed');
     } finally {
       setSubmitting(false);
     }

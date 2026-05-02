@@ -29,7 +29,7 @@ export default function SignupPage() {
       );
       navigate(user.role === 'landlord' ? '/dashboard' : '/browse');
     } catch (err) {
-      setError(err.response?.data?.message || 'Signup failed');
+      setError(err.userMessage || err.response?.data?.message || 'Signup failed');
     } finally {
       setSubmitting(false);
     }
