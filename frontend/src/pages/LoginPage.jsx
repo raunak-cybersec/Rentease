@@ -67,8 +67,8 @@ export default function LoginPage() {
           </Link>
         </p>
         <div className="mt-5 rounded-lg bg-white/5 p-3 text-sm text-slate-400">
-          Admin demo: <span className="text-slate-200">admin@rentease.com</span> /{' '}
-          <span className="text-slate-200">admin123</span>
+          Admin login: <span className="text-slate-200">rentease.admin@gmail.com</span> /{' '}
+          <span className="text-slate-200">RentEase@2026</span>
         </div>
       </div>
     </div>
