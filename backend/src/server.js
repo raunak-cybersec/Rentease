@@ -8,6 +8,7 @@ import listingRoutes from './routes/listings.js';
 import userRoutes from './routes/users.js';
 import messageRoutes from './routes/messages.js';
 import adminRoutes from './routes/admin.js';
+import User from './models/User.js';
 
 dotenv.config();
 
@@ -32,11 +33,38 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '15mb' }));
 
+// Ensure admin account always exists with correct credentials
+async function ensureAdmin() {
+  try {
+    const ADMIN_EMAIL = 'rentease.admin@gmail.com';
+    const ADMIN_PASSWORD = 'RentEase@2026';
+
+    // Delete any existing admin(s) and recreate fresh to fix any hash corruption
+    await User.deleteMany({ role: 'admin' });
+
+    const admin = new User({
+      name: 'RentEase Admin',
+      email: ADMIN_EMAIL,
+      passwordHash: ADMIN_PASSWORD, // pre-save hook will hash this
+      role: 'admin',
+    });
+    await admin.save();
+
+    const ok = await admin.comparePassword(ADMIN_PASSWORD);
+    console.log(`Admin account: ${ADMIN_EMAIL} — password check: ${ok ? '✅ OK' : '❌ FAILED'}`);
+  } catch (err) {
+    console.error('ensureAdmin error:', err.message);
+  }
+}
+
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
   serverSelectionTimeoutMS: 10000,
 })
-  .then(() => console.log('MongoDB connected'))
+  .then(async () => {
+    console.log('MongoDB connected');
+    await ensureAdmin();
+  })
   .catch((err) => console.log('MongoDB connection error:', err));
 
 app.get('/api/health', (req, res) => {
